@@ -2,6 +2,8 @@
 
 This is a simple Python script that downloads a Spotify playlist using the `spotdl` and `spotipy` library. It prompts the user to input the Spotify playlist link and the output path where the downloaded songs will be saved.
 
+The script was created to rapidly create datasets of `.mp3` files for use in music clustering research.
+
 
 ## Prerequisites
 
