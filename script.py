@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import shutil
 import spotipy
@@ -27,18 +28,37 @@ def initialise_services(output_path: str):
     )
 
 
+def extract_playlist_id(url: str):
+    return re.match('.*playlist\/(.*)', url).group(1).partition('?')[0]
+
+
+def prompt_user_input():
+    playlist = input('Enter Spotify playlist link: ')
+    output_path = input('Enter output path: ')
+    return playlist, output_path
+
+
+def confirm_choice(playlist: Playlist):
+    print(f'About to download playlist: {playlist.name} by {playlist.owner_name}')
+    choice = input('Confirm? (y/n) ')
+    return choice.lower() == 'y'
+
+
 def main():
-    output_path = './downloads'
+    playlist, output_path = prompt_user_input()
+
     sp, spotdl = initialise_services(output_path)
-    playlist = get_playlist_from_id(sp, '1VRQ7AA8N9jRc3yP9UOzGQ')
+    playlist = get_playlist_from_id(sp, extract_playlist_id(playlist))
 
-    # print(json.dumps(dataclasses.asdict(playlist), indent=2))
-    songs = spotdl.search([track.url for track in playlist.tracks])
+    if confirm_choice(playlist):
+        # print(json.dumps(dataclasses.asdict(playlist), indent=2))
+        songs = spotdl.search([track.url for track in playlist.tracks])
 
-    shutil.rmtree(output_path)
-    # print(songs)    
-    spotdl.download_songs(songs)
-
+        shutil.rmtree(output_path)
+        # print(songs)
+        spotdl.download_songs(songs)
+    else:
+        print('Exiting...')
 
 
 if __name__ == "__main__":

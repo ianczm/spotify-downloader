@@ -8,6 +8,7 @@ class JSONSpotifyConverter:
             id = o.get('id'),
             uri = o.get('uri'),
             url = o.get('external_urls').get('spotify'),
+            name = o.get('name'),
             owner_name = o.get('owner').get('display_name'),
             owner_id = o.get('owner').get('id'),
             tracks = [JSONSpotifyConverter.toTrack(item) for item in o.get('tracks').get('items')]
@@ -39,6 +40,7 @@ class Playlist:
     id: str
     uri: str
     url: str
+    name: str
     owner_name: str
     owner_id: str
     tracks: list[Track]
