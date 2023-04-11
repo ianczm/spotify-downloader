@@ -10,7 +10,7 @@ class JSONSpotifyConverter:
             url = o.get('external_urls').get('spotify'),
             owner_name = o.get('owner').get('display_name'),
             owner_id = o.get('owner').get('id'),
-            tracks = list(map(JSONSpotifyConverter.toTrack, o.get('tracks').get('items')))
+            tracks = [JSONSpotifyConverter.toTrack(item) for item in o.get('tracks').get('items')]
         )
     
     @staticmethod
@@ -20,7 +20,8 @@ class JSONSpotifyConverter:
             id = trackObj.get('id'),
             url = trackObj.get('external_urls').get('spotify'),
             uri = trackObj.get('uri'),
-            name = trackObj.get('name')
+            name = trackObj.get('name'),
+            artist = [artist.get('name') for artist in trackObj.get('artists')]
         )
 
 
@@ -30,6 +31,7 @@ class Track:
     uri: str
     url: str
     name: str
+    artist: list[str]
 
 
 @dataclass
@@ -40,3 +42,4 @@ class Playlist:
     owner_name: str
     owner_id: str
     tracks: list[Track]
+
