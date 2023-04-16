@@ -54,7 +54,11 @@ def main():
         # print(json.dumps(dataclasses.asdict(playlist), indent=2))
         songs = spotdl.search([track.url for track in playlist.tracks])
 
-        shutil.rmtree(output_path)
+        if not os.path.exists(output_path):
+            os.makedirs(output_path)
+        else:
+            shutil.rmtree(output_path)
+
         # print(songs)
         spotdl.download_songs(songs)
     else:
